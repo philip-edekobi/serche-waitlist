@@ -26,11 +26,10 @@
                 <h1> <span class="single-green">Launching</span> Soon </h1>
                 <p id="content-p"> We're currently working on creating our website, subscribe to be notified.</p>
 
-                <form action="/submit" method="post">
+                <form id="submitmail">
                     <div>
-                        <input name="email" type="email" placeholder="Email" class="button-email">
+                        <input id="email-input" name="email" type="email" placeholder="Email" class="button-email">
                         <button type="submit" class="button">Submit</button>
-                        <!-- <input type="submit" class="button"> -->
                     </div>
                 </form>
 
@@ -84,7 +83,28 @@
 
         }, 1000);
 
-
+        document.getElementById("submitmail").onsubmit = async () => {
+            event.preventDefault();
+            let email = document.getElementById("email-input").value;
+            if (email == "") {
+                alert("Please enter your email");
+            } else {
+                let data = { email: email };
+                const resp = await fetch("/api/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(data),
+                })
+                const json = await resp.json();
+                if (json.statusCode === 200) {
+                    alert("Thank you for subscribing");
+                } else {
+                    alert("Something went wrong... Please try again");
+                }
+            }
+        }
 
     </script>
 
