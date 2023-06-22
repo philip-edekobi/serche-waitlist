@@ -8,6 +8,9 @@ module.exports = async (req, res) => {
     }
 
     try {
+        const existing = member.findOne({ email });
+        if (existing) return res.status(400).json({ error: "email already exists" })
+
         const newMember = new member({ email });
         await newMember.save();
         return res.status(200).json({ message: "success" });
