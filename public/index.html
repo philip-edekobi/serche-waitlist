@@ -102,11 +102,31 @@
                     body: JSON.stringify(data),
                 })
                 const json = await resp.json();
-                if (json.message === "success") {
-                    alert("Thank you for subscribing");
-                    document.getElementById("email-input").value = "";
-                } else {
-                    alert("Something went wrong... Please try again");
+
+                switch (resp.status) {
+                    case 200: {
+                        if (json.message === "success") {
+                            alert("Thank you for subscribing");
+                            document.getElementById("email-input").value = "";
+                        } else {
+                            alert("Something went wrong... Please try again");
+                        }
+                        break;
+                    }
+                    case 400: {
+                        if (json.message === "email already exists") {
+                            alert("You have already subscribed");
+                            document.getElementById("email-input").value = "";
+                        }
+                        else {
+                            alert("Please enter a valid email");
+                            break;
+                        }
+                    }
+                    default: {
+                        alert("Something went wrong... Please try again");
+                        break;
+                    }
                 }
             }
         }
